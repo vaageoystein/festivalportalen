@@ -1,4 +1,4 @@
-import type { TicketSale } from '@/types/database'
+import type { TicketSale, Income, Expense } from '@/types/database'
 
 function formatNumber(n: number | null): string {
   if (n === null) return ''
@@ -10,6 +10,16 @@ function escapeCsv(val: string): string {
     return `"${val.replace(/"/g, '""')}"`
   }
   return val
+}
+
+function downloadCsv(csv: string, filename: string) {
+  const bom = '\uFEFF' // UTF-8 BOM for Excel compatibility
+  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(link.href)
 }
 
 export function exportSalesCsv(sales: TicketSale[], filename: string) {
@@ -38,12 +48,65 @@ export function exportSalesCsv(sales: TicketSale[], filename: string) {
   ])
 
   const csv = [header, ...rows].map((row) => row.join(',')).join('\n')
-  const bom = '\uFEFF' // UTF-8 BOM for Excel compatibility
-  const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' })
+  downloadCsv(csv, filename)
+}
 
-  const link = document.createElement('a')
-  link.href = URL.createObjectURL(blob)
-  link.download = filename
-  link.click()
-  URL.revokeObjectURL(link.href)
+export function exportEconomyCsv(
+  income: Income[],
+  expenses: Expense[],
+  filename: string,
+) {
+  const header = [
+    'Type',
+    'Kategori',
+    'Skildring',
+    'Beløp eks. MVA',
+    'MVA-sats',
+    'MVA-beløp',
+    'Beløp inkl. MVA',
+    'Kjelde/Leverandør',
+    'Budsjett/Faktisk',
+    'Dato',
+  ]
+
+  const incomeRows = income.map((i) => {
+    const exVat = i.amount_ex_vat ?? 0
+    const vatRate = i.vat_rate ?? 0
+    const vatAmount = i.vat_amount ?? exVat * vatRate
+    return [
+      'Inntekt',
+      escapeCsv(i.category),
+      escapeCsv(i.description ?? ''),
+      formatNumber(exVat),
+      vatRate ? `${(vatRate * 100).toFixed(0)}%` : '',
+      formatNumber(vatAmount),
+      formatNumber(exVat + vatAmount),
+      escapeCsv(i.source ?? ''),
+      i.is_budget ? 'Budsjett' : 'Faktisk',
+      i.date ?? '',
+    ]
+  })
+
+  const expenseRows = expenses.map((e) => {
+    const exVat = e.amount_ex_vat ?? 0
+    const vatRate = e.vat_rate ?? 0
+    const vatAmount = e.vat_amount ?? exVat * vatRate
+    return [
+      'Kostnad',
+      escapeCsv(e.category),
+      escapeCsv(e.description ?? ''),
+      formatNumber(exVat),
+      vatRate ? `${(vatRate * 100).toFixed(0)}%` : '',
+      formatNumber(vatAmount),
+      formatNumber(exVat + vatAmount),
+      escapeCsv(e.supplier ?? ''),
+      e.is_budget ? 'Budsjett' : 'Faktisk',
+      e.date ?? '',
+    ]
+  })
+
+  const csv = [header, ...incomeRows, ...expenseRows]
+    .map((row) => row.join(','))
+    .join('\n')
+  downloadCsv(csv, filename)
 }
