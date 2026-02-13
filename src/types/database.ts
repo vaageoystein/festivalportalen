@@ -103,6 +103,23 @@ export interface Expense {
   created_at: string
 }
 
+export interface FestivalIntegration {
+  id: string
+  festival_id: string
+  ticketco_api_key: string | null
+  ticketco_event_id: string | null
+  created_at: string
+}
+
+export interface TicketCoSyncLog {
+  id: string
+  festival_id: string
+  synced_at: string
+  records_synced: number | null
+  status: 'success' | 'error'
+  error_message: string | null
+}
+
 export interface Report {
   id: string
   festival_id: string

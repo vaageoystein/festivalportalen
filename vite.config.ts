@@ -10,6 +10,16 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          recharts: ['recharts'],
+          supabase: ['@supabase/supabase-js'],
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),

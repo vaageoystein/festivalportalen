@@ -50,7 +50,19 @@
     "forecast": "Prognose",
     "fnb": "Mat og drikke",
     "web": "Nett",
-    "pos": "Utsalgssted"
+    "pos": "Utsalgssted",
+    "ticketsSold": "Billetter solgt",
+    "ticketRevenue": "Billettinntekt",
+    "tickets": "Billetter",
+    "revenue": "Omsetning",
+    "today": "i dag",
+    "items": "varer",
+    "perDay": "per dag",
+    "daysLeft": "dager igjen",
+    "exportTickets": "Eksporter billetter (CSV)",
+    "exportFnb": "Eksporter mat/drikke (CSV)",
+    "noData": "Ingen salgsdata ennå",
+    "noDataHint": "Koble til TicketCo i Innstillinger for å synkronisere salg"
   },
   "economy": {
     "title": "Økonomi",

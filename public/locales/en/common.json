@@ -50,7 +50,19 @@
     "forecast": "Forecast",
     "fnb": "Food & Beverage",
     "web": "Online",
-    "pos": "Point of sale"
+    "pos": "Point of sale",
+    "ticketsSold": "Tickets sold",
+    "ticketRevenue": "Ticket revenue",
+    "tickets": "Tickets",
+    "revenue": "Revenue",
+    "today": "today",
+    "items": "items",
+    "perDay": "per day",
+    "daysLeft": "days left",
+    "exportTickets": "Export tickets (CSV)",
+    "exportFnb": "Export F&B (CSV)",
+    "noData": "No sales data yet",
+    "noDataHint": "Connect TicketCo in Settings to sync sales"
   },
   "economy": {
     "title": "Economy",
