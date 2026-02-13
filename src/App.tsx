@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuthContext } from '@/contexts/AuthContext'
 import AppLayout from '@/components/layout/AppLayout'
 import LoginPage from '@/pages/LoginPage'
 import DashboardPage from '@/pages/DashboardPage'
@@ -39,7 +39,7 @@ function UnauthenticatedRoutes() {
 }
 
 export default function App() {
-  const { session, loading } = useAuth()
+  const { session, loading } = useAuthContext()
   const { t } = useTranslation()
 
   if (loading) {
