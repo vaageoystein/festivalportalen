@@ -52,7 +52,10 @@
     "totalRevenue": "Totalinntekt",
     "budgetVsActual": "Budsjett vs. faktisk",
     "recentActivity": "Siste aktivitet",
-    "today": "I dag"
+    "today": "I dag",
+    "salesTrend": "Salsutvikling (siste 14 dagar)",
+    "noEconomyData": "Legg inn inntekter og kostnader i Økonomi-modulen",
+    "noActivity": "Ingen aktivitet enno"
   },
   "sales": {
     "title": "Billettsalg",

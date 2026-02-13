@@ -52,7 +52,10 @@
     "totalRevenue": "Total revenue",
     "budgetVsActual": "Budget vs. actual",
     "recentActivity": "Recent activity",
-    "today": "Today"
+    "today": "Today",
+    "salesTrend": "Sales trend (last 14 days)",
+    "noEconomyData": "Add income and expenses in the Economy module",
+    "noActivity": "No activity yet"
   },
   "sales": {
     "title": "Ticket Sales",
