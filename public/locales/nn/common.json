@@ -17,7 +17,18 @@
     "email": "E-post",
     "sendMagicLink": "Send innloggingslenke",
     "checkEmail": "Sjekk e-posten din for innloggingslenke",
-    "loginTitle": "Logg inn på Festivalportalen"
+    "loginTitle": "Logg inn på Festivalportalen",
+    "password": "Passord",
+    "confirmPassword": "Stadfest passord",
+    "setPassword": "Set passord",
+    "setPasswordHint": "Vel eit passord for å logge inn enklare neste gong",
+    "forgotPassword": "Gløymt passord?",
+    "resetSent": "E-post for tilbakestilling av passord er sendt. Sjekk innboksen din.",
+    "sendReset": "Send tilbakestillingslenke",
+    "passwordMin": "Passord må vere minst 8 teikn",
+    "passwordMismatch": "Passorda er ikkje like",
+    "loginError": "Feil e-post eller passord",
+    "firstTimeHint": "Første gong? Sjekk e-posten for invitasjonslenke"
   },
   "common": {
     "loading": "Lastar...",

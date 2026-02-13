@@ -17,7 +17,18 @@
     "email": "Email",
     "sendMagicLink": "Send magic link",
     "checkEmail": "Check your email for a login link",
-    "loginTitle": "Log in to Festivalportalen"
+    "loginTitle": "Log in to Festivalportalen",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "setPassword": "Set password",
+    "setPasswordHint": "Choose a password so you can log in more easily next time",
+    "forgotPassword": "Forgot password?",
+    "resetSent": "Password reset email sent. Check your inbox.",
+    "sendReset": "Send reset link",
+    "passwordMin": "Password must be at least 8 characters",
+    "passwordMismatch": "Passwords do not match",
+    "loginError": "Wrong email or password",
+    "firstTimeHint": "First time? Check your email for an invitation link"
   },
   "common": {
     "loading": "Loading...",

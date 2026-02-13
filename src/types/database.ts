@@ -30,6 +30,7 @@ export interface UserProfile {
   full_name: string | null
   email: string | null
   locale: string | null
+  has_password: boolean
   created_at: string
 }
 

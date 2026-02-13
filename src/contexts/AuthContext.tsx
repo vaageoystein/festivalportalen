@@ -8,6 +8,8 @@ interface AuthContextValue {
   profile: UserProfile | null
   festival: Festival | null
   loading: boolean
+  isPasswordRecovery: boolean
+  setIsPasswordRecovery: (v: boolean) => void
   refreshProfile: () => Promise<void>
   refreshFestival: () => Promise<void>
 }
@@ -19,6 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null)
   const [festival, setFestival] = useState<Festival | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false)
 
   const fetchProfile = async (userId: string) => {
     try {
@@ -87,8 +90,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       setSession(session)
+
+      if (event === 'PASSWORD_RECOVERY') {
+        setIsPasswordRecovery(true)
+      }
+
       if (session?.user.id) {
         fetchProfile(session.user.id).then((p) => {
           if (p?.festival_id) {
@@ -106,7 +114,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ session, profile, festival, loading, refreshProfile, refreshFestival }}
+      value={{
+        session,
+        profile,
+        festival,
+        loading,
+        isPasswordRecovery,
+        setIsPasswordRecovery,
+        refreshProfile,
+        refreshFestival,
+      }}
     >
       {children}
     </AuthContext.Provider>
