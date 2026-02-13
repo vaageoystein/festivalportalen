@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Download, FileSpreadsheet, Calendar } from 'lucide-react'
+import { Download, FileSpreadsheet, FileText, Calendar } from 'lucide-react'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import {
@@ -10,7 +10,8 @@ import {
   exportEconomyCsv,
   groupSalesByVat,
 } from '@/lib/export-csv'
-import type { TicketSale, Income, Expense } from '@/types/database'
+import { generateSponsorReportPdf, generateAnnualReportPdf } from '@/lib/report-pdf'
+import type { Festival, TicketSale, Income, Expense, Sponsor, SponsorDeliverable } from '@/types/database'
 
 type Tab = 'accounting' | 'sponsor' | 'annual'
 
@@ -23,13 +24,15 @@ export default function ReportsPage() {
   const [sales, setSales] = useState<TicketSale[]>([])
   const [income, setIncome] = useState<Income[]>([])
   const [expenses, setExpenses] = useState<Expense[]>([])
+  const [sponsors, setSponsors] = useState<Sponsor[]>([])
+  const [deliverables, setDeliverables] = useState<SponsorDeliverable[]>([])
   const [loading, setLoading] = useState(true)
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
   const fetchData = useCallback(async () => {
     if (!festival) return
-    const [salesRes, incRes, expRes] = await Promise.all([
+    const [salesRes, incRes, expRes, sponRes, delRes] = await Promise.all([
       supabase
         .from('ticket_sales')
         .select('*')
@@ -45,10 +48,21 @@ export default function ReportsPage() {
         .select('*')
         .eq('festival_id', festival.id)
         .eq('is_budget', false),
+      supabase
+        .from('sponsors')
+        .select('*')
+        .eq('festival_id', festival.id)
+        .order('created_at', { ascending: true }),
+      supabase
+        .from('sponsor_deliverables')
+        .select('*')
+        .eq('festival_id', festival.id),
     ])
     if (salesRes.data) setSales(salesRes.data)
     if (incRes.data) setIncome(incRes.data)
     if (expRes.data) setExpenses(expRes.data)
+    if (sponRes.data) setSponsors(sponRes.data)
+    if (delRes.data) setDeliverables(delRes.data)
     setLoading(false)
   }, [festival?.id])
 
@@ -170,27 +184,25 @@ export default function ReportsPage() {
       )}
 
       {tab === 'sponsor' && (
-        <div className="rounded-xl border border-border bg-surface p-12 text-center shadow-sm">
-          <FileSpreadsheet size={48} className="mx-auto text-primary" />
-          <p className="mt-4 text-lg font-medium text-text-body">
-            {t('reports.sponsorReport')}
-          </p>
-          <p className="mt-1 text-sm text-text-muted">
-            {t('settings.comingSoon')}
-          </p>
-        </div>
+        <SponsorReportTab
+          t={t}
+          festival={festival!}
+          sponsors={sponsors}
+          deliverables={deliverables}
+          fmt={fmt}
+        />
       )}
 
       {tab === 'annual' && (
-        <div className="rounded-xl border border-border bg-surface p-12 text-center shadow-sm">
-          <FileSpreadsheet size={48} className="mx-auto text-primary" />
-          <p className="mt-4 text-lg font-medium text-text-body">
-            {t('reports.annualReport')}
-          </p>
-          <p className="mt-1 text-sm text-text-muted">
-            {t('settings.comingSoon')}
-          </p>
-        </div>
+        <AnnualReportTab
+          t={t}
+          festival={festival!}
+          sales={sales}
+          income={income}
+          expenses={expenses}
+          sponsors={sponsors}
+          fmt={fmt}
+        />
       )}
     </div>
   )
@@ -432,6 +444,259 @@ function AccountingExportTab({
             </p>
           </div>
         )}
+    </div>
+  )
+}
+
+// --- Sponsor Report Tab ---
+
+function SponsorReportTab({
+  t,
+  festival,
+  sponsors,
+  deliverables,
+  fmt,
+}: {
+  t: (key: string) => string
+  festival: Festival
+  sponsors: Sponsor[]
+  deliverables: SponsorDeliverable[]
+  fmt: (n: number) => string
+}) {
+  const totalAmount = sponsors.reduce((s, sp) => s + (sp.agreement_amount ?? 0), 0)
+  const signed = sponsors.filter((s) =>
+    ['signed', 'delivered', 'invoiced'].includes(s.status),
+  ).length
+  const deliveredCount = deliverables.filter((d) => d.delivered).length
+
+  const handleGenerate = () => {
+    const doc = generateSponsorReportPdf(festival, sponsors, deliverables)
+    doc.save(`sponsorrapport-${festival.slug ?? festival.name.toLowerCase()}.pdf`)
+  }
+
+  if (sponsors.length === 0) {
+    return (
+      <div className="rounded-xl border border-border bg-surface p-12 text-center shadow-sm">
+        <FileSpreadsheet size={48} className="mx-auto text-primary" />
+        <p className="mt-4 text-lg font-medium text-text-body">
+          {t('sponsors.noData')}
+        </p>
+        <p className="mt-1 text-sm text-text-muted">
+          {t('sponsors.noDataHint')}
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Summary cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <SummaryCard
+          label={t('sponsors.totalSponsors')}
+          value={String(sponsors.length)}
+          sub={`${signed} ${t('sponsors.signed').toLowerCase()}`}
+        />
+        <SummaryCard
+          label={t('sponsors.totalAmount')}
+          value={fmt(totalAmount)}
+          sub=""
+        />
+        <SummaryCard
+          label={t('sponsors.deliverables')}
+          value={`${deliveredCount} / ${deliverables.length}`}
+          sub={t('sponsors.delivered').toLowerCase()}
+        />
+      </div>
+
+      {/* Sponsor preview table */}
+      <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-text-heading">
+          {t('sponsors.sponsorList')}
+        </h3>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-border text-xs text-text-muted">
+                <th className="pb-2 pr-4">{t('sponsors.name')}</th>
+                <th className="pb-2 pr-4">{t('sponsors.level')}</th>
+                <th className="pb-2 pr-4 text-right">{t('sponsors.agreementAmount')}</th>
+                <th className="pb-2 pr-4">{t('sponsors.status')}</th>
+                <th className="pb-2 text-right">{t('sponsors.deliverables')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sponsors.map((sp) => {
+                const spDels = deliverables.filter((d) => d.sponsor_id === sp.id)
+                const spDelivered = spDels.filter((d) => d.delivered).length
+                return (
+                  <tr key={sp.id} className="border-b border-border-light">
+                    <td className="py-2 pr-4 font-medium text-text-body">
+                      {sp.name}
+                    </td>
+                    <td className="py-2 pr-4 text-text-muted">
+                      {sp.level ? t(`sponsors.${sp.level}`) : ''}
+                    </td>
+                    <td className="py-2 pr-4 text-right text-text-body">
+                      {sp.agreement_amount != null ? fmt(sp.agreement_amount) : ''}
+                    </td>
+                    <td className="py-2 pr-4 text-text-muted">
+                      {t(`sponsors.${sp.status}`)}
+                    </td>
+                    <td className="py-2 text-right text-text-muted">
+                      {spDels.length > 0 ? `${spDelivered}/${spDels.length}` : ''}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Generate button */}
+      <div className="flex gap-3">
+        <button
+          onClick={handleGenerate}
+          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-dark"
+        >
+          <FileText size={16} />
+          {t('reports.generate')} PDF
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// --- Annual Report Tab ---
+
+function AnnualReportTab({
+  t,
+  festival,
+  sales,
+  income,
+  expenses,
+  sponsors,
+  fmt,
+}: {
+  t: (key: string) => string
+  festival: Festival
+  sales: TicketSale[]
+  income: Income[]
+  expenses: Expense[]
+  sponsors: Sponsor[]
+  fmt: (n: number) => string
+}) {
+  const tickets = sales.filter((s) => s.category !== 'fb')
+  const fnb = sales.filter((s) => s.category === 'fb')
+  const ticketRev = tickets.reduce((s, r) => s + (r.price_inc_vat ?? 0) * r.quantity, 0)
+  const fnbRev = fnb.reduce((s, r) => s + (r.price_inc_vat ?? 0) * r.quantity, 0)
+  const actualIncome = income.filter((i) => !i.is_budget)
+  const actualExpenses = expenses.filter((e) => !e.is_budget)
+  const totalInc = actualIncome.reduce(
+    (s, i) =>
+      s + (i.amount_ex_vat ?? 0) + (i.vat_amount ?? (i.amount_ex_vat ?? 0) * (i.vat_rate ?? 0)),
+    0,
+  )
+  const totalExp = actualExpenses.reduce(
+    (s, e) =>
+      s + (e.amount_ex_vat ?? 0) + (e.vat_amount ?? (e.amount_ex_vat ?? 0) * (e.vat_rate ?? 0)),
+    0,
+  )
+  const sponsorAmount = sponsors.reduce((s, sp) => s + (sp.agreement_amount ?? 0), 0)
+
+  const handleGenerate = () => {
+    const doc = generateAnnualReportPdf(festival, sales, income, expenses, sponsors)
+    doc.save(`arsrapport-${festival.slug ?? festival.name.toLowerCase()}.pdf`)
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Summary cards */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <SummaryCard
+          label={t('reports.totalTickets')}
+          value={fmt(ticketRev)}
+          sub={`${tickets.reduce((s, r) => s + r.quantity, 0)} ${t('sales.tickets').toLowerCase()}`}
+        />
+        <SummaryCard
+          label={t('reports.totalFnb')}
+          value={fmt(fnbRev)}
+          sub={`${fnb.reduce((s, r) => s + r.quantity, 0)} ${t('sales.items')}`}
+        />
+        <SummaryCard
+          label={t('economy.result')}
+          value={fmt(totalInc + ticketRev + fnbRev - totalExp)}
+          sub={`${t('economy.income')}: ${fmt(totalInc + ticketRev + fnbRev)}`}
+        />
+        <SummaryCard
+          label={t('sponsors.totalAmount')}
+          value={fmt(sponsorAmount)}
+          sub={`${sponsors.length} ${t('nav.sponsors').toLowerCase()}`}
+        />
+      </div>
+
+      {/* Economy preview */}
+      <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-text-heading">
+          {t('reports.summary')}
+        </h3>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-border text-xs text-text-muted">
+                <th className="pb-2 pr-4">{t('economy.category')}</th>
+                <th className="pb-2 text-right">{t('sales.revenue')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-border-light">
+                <td className="py-2 pr-4 text-text-body">{t('reports.ticketSales')}</td>
+                <td className="py-2 text-right font-medium text-text-heading">
+                  {fmt(ticketRev)}
+                </td>
+              </tr>
+              <tr className="border-b border-border-light">
+                <td className="py-2 pr-4 text-text-body">{t('reports.fnbSales')}</td>
+                <td className="py-2 text-right font-medium text-text-heading">
+                  {fmt(fnbRev)}
+                </td>
+              </tr>
+              <tr className="border-b border-border-light">
+                <td className="py-2 pr-4 text-text-body">{t('reports.totalIncome')}</td>
+                <td className="py-2 text-right font-medium text-success">
+                  {fmt(totalInc)}
+                </td>
+              </tr>
+              <tr className="border-b border-border-light">
+                <td className="py-2 pr-4 text-text-body">{t('reports.totalExpenses')}</td>
+                <td className="py-2 text-right font-medium text-danger">
+                  {fmt(totalExp)}
+                </td>
+              </tr>
+              <tr>
+                <td className="py-2 pr-4 font-semibold text-text-heading">
+                  {t('economy.result')}
+                </td>
+                <td className="py-2 text-right text-lg font-bold text-text-heading">
+                  {fmt(totalInc + ticketRev + fnbRev - totalExp)}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Generate button */}
+      <div className="flex gap-3">
+        <button
+          onClick={handleGenerate}
+          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-dark"
+        >
+          <FileText size={16} />
+          {t('reports.generate')} PDF
+        </button>
+      </div>
     </div>
   )
 }
