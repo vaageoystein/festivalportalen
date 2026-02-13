@@ -28,7 +28,8 @@
     "passwordMin": "Password must be at least 8 characters",
     "passwordMismatch": "Passwords do not match",
     "loginError": "Wrong email or password",
-    "firstTimeHint": "First time? Check your email for an invitation link"
+    "firstTimeHint": "First time? Check your email for an invitation link",
+    "firstTimeLogin": "First time?"
   },
   "common": {
     "loading": "Loading...",

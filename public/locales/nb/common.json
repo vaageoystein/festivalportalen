@@ -28,7 +28,8 @@
     "passwordMin": "Passord må vere minst 8 teikn",
     "passwordMismatch": "Passorda er ikkje like",
     "loginError": "Feil e-post eller passord",
-    "firstTimeHint": "Første gong? Sjekk e-posten for invitasjonslenke"
+    "firstTimeHint": "Første gong? Sjekk e-posten for invitasjonslenke",
+    "firstTimeLogin": "Første gong?"
   },
   "common": {
     "loading": "Laster...",
