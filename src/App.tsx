@@ -14,6 +14,7 @@ import SponsorPortalPage from '@/pages/SponsorPortalPage'
 function AuthenticatedRoutes() {
   return (
     <Routes>
+      <Route path="/sponsor-portal" element={<SponsorPortalPage />} />
       <Route element={<AppLayout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/sales" element={<SalesPage />} />
