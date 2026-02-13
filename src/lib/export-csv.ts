@@ -6,10 +6,15 @@ function formatNumber(n: number | null): string {
 }
 
 export function escapeCsv(val: string): string {
-  if (val.includes(',') || val.includes('"') || val.includes('\n')) {
-    return `"${val.replace(/"/g, '""')}"`
+  // Prevent CSV injection: prefix formula characters with a single quote
+  let safe = val
+  if (/^[=+\-@\t\r]/.test(safe)) {
+    safe = `'${safe}`
   }
-  return val
+  if (safe.includes(',') || safe.includes('"') || safe.includes('\n')) {
+    return `"${safe.replace(/"/g, '""')}"`
+  }
+  return safe
 }
 
 export function downloadCsv(csv: string, filename: string) {
