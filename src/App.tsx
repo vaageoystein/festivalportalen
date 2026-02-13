@@ -1,6 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { Suspense } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '@/contexts/AuthContext'
 import AppLayout from '@/components/layout/AppLayout'
 import LoginPage from '@/pages/LoginPage'
@@ -40,27 +38,18 @@ function UnauthenticatedRoutes() {
 
 export default function App() {
   const { session, loading } = useAuthContext()
-  const { t } = useTranslation()
 
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <p className="text-slate-400">{t('common.loading')}</p>
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-700 border-t-blue-500" />
       </div>
     )
   }
 
   return (
     <BrowserRouter>
-      <Suspense
-        fallback={
-          <div className="flex h-screen items-center justify-center">
-            <p className="text-slate-400">{t('common.loading')}</p>
-          </div>
-        }
-      >
-        {session ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
-      </Suspense>
+      {session ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />}
     </BrowserRouter>
   )
 }

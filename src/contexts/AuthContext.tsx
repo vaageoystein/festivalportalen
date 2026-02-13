@@ -21,22 +21,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   const fetchProfile = async (userId: string) => {
-    const { data } = await supabase
-      .from('user_profiles')
-      .select('*')
-      .eq('id', userId)
-      .single()
-    setProfile(data)
-    return data
+    try {
+      const { data } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+      setProfile(data)
+      return data
+    } catch {
+      return null
+    }
   }
 
   const fetchFestival = async (festivalId: string) => {
-    const { data } = await supabase
-      .from('festivals')
-      .select('*')
-      .eq('id', festivalId)
-      .single()
-    setFestival(data)
+    try {
+      const { data } = await supabase
+        .from('festivals')
+        .select('*')
+        .eq('id', festivalId)
+        .single()
+      setFestival(data)
+    } catch {
+      // Festival not found — ok during initial setup
+    }
   }
 
   const refreshProfile = async () => {
@@ -55,20 +63,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      if (session?.user.id) {
-        fetchProfile(session.user.id).then((p) => {
-          if (p?.festival_id) {
-            fetchFestival(p.festival_id).then(() => setLoading(false))
-          } else {
-            setLoading(false)
-          }
-        })
-      } else {
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        setSession(session)
+        if (session?.user.id) {
+          fetchProfile(session.user.id)
+            .then((p) => {
+              if (p?.festival_id) {
+                fetchFestival(p.festival_id).finally(() => setLoading(false))
+              } else {
+                setLoading(false)
+              }
+            })
+            .catch(() => setLoading(false))
+        } else {
+          setLoading(false)
+        }
+      })
+      .catch(() => {
         setLoading(false)
-      }
-    })
+      })
 
     const {
       data: { subscription },
