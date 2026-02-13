@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "Festivalportalen",
+    "tagline": "Rapporteringsportal for norske festivaler"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "sales": "Billettsalg",
+    "economy": "Økonomi",
+    "sponsors": "Sponsorer",
+    "reports": "Rapporter",
+    "settings": "Innstillinger"
+  },
+  "auth": {
+    "login": "Logg inn",
+    "logout": "Logg ut",
+    "email": "E-post",
+    "sendMagicLink": "Send innloggingslenke",
+    "checkEmail": "Sjekk e-posten din for innloggingslenke",
+    "loginTitle": "Logg inn på Festivalportalen"
+  },
+  "common": {
+    "loading": "Laster...",
+    "error": "Noe gikk galt",
+    "save": "Lagre",
+    "cancel": "Avbryt",
+    "delete": "Slett",
+    "edit": "Rediger",
+    "create": "Opprett",
+    "search": "Søk",
+    "export": "Eksporter",
+    "back": "Tilbake",
+    "next": "Neste",
+    "yes": "Ja",
+    "no": "Nei"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "ticketsSold": "Billetter solgt",
+    "totalRevenue": "Totalinntekt",
+    "budgetVsActual": "Budsjett vs. faktisk",
+    "recentActivity": "Siste aktivitet",
+    "today": "I dag"
+  },
+  "sales": {
+    "title": "Billettsalg",
+    "salesOverTime": "Salgskurve over tid",
+    "byTicketType": "Per billettype",
+    "byChannel": "Per salgskanal",
+    "forecast": "Prognose",
+    "fnb": "Mat og drikke",
+    "web": "Nett",
+    "pos": "Utsalgssted"
+  },
+  "economy": {
+    "title": "Økonomi",
+    "income": "Inntekter",
+    "expenses": "Kostnader",
+    "result": "Resultat",
+    "budget": "Budsjett",
+    "actual": "Faktisk",
+    "variance": "Avvik",
+    "vat": "MVA"
+  },
+  "sponsors": {
+    "title": "Sponsorer",
+    "sponsorList": "Sponsorliste",
+    "level": "Nivå",
+    "agreementAmount": "Avtalebeløp",
+    "status": "Status",
+    "deliverables": "Leveranser",
+    "contacted": "Kontaktet",
+    "agreed": "Avtalt",
+    "signed": "Signert",
+    "delivered": "Levert",
+    "invoiced": "Fakturert"
+  },
+  "reports": {
+    "title": "Rapporter",
+    "sponsorReport": "Sponsorrapport",
+    "annualReport": "Årsrapport",
+    "accountingReport": "Regnskapsrapport",
+    "generate": "Generer rapport",
+    "preview": "Forhåndsvis",
+    "sendEmail": "Send på e-post"
+  },
+  "settings": {
+    "title": "Innstillinger",
+    "festival": "Festival",
+    "users": "Brukere",
+    "ticketCategories": "Billettkategorier",
+    "budgetPosts": "Budsjettposter",
+    "vatRates": "MVA-satser",
+    "integrations": "Integrasjoner"
+  }
+}

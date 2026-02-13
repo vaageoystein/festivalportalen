@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "Festivalportalen",
+    "tagline": "Reporting portal for Norwegian festivals"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "sales": "Ticket Sales",
+    "economy": "Economy",
+    "sponsors": "Sponsors",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "auth": {
+    "login": "Log in",
+    "logout": "Log out",
+    "email": "Email",
+    "sendMagicLink": "Send magic link",
+    "checkEmail": "Check your email for a login link",
+    "loginTitle": "Log in to Festivalportalen"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "export": "Export",
+    "back": "Back",
+    "next": "Next",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "ticketsSold": "Tickets sold",
+    "totalRevenue": "Total revenue",
+    "budgetVsActual": "Budget vs. actual",
+    "recentActivity": "Recent activity",
+    "today": "Today"
+  },
+  "sales": {
+    "title": "Ticket Sales",
+    "salesOverTime": "Sales over time",
+    "byTicketType": "By ticket type",
+    "byChannel": "By sales channel",
+    "forecast": "Forecast",
+    "fnb": "Food & Beverage",
+    "web": "Online",
+    "pos": "Point of sale"
+  },
+  "economy": {
+    "title": "Economy",
+    "income": "Income",
+    "expenses": "Expenses",
+    "result": "Result",
+    "budget": "Budget",
+    "actual": "Actual",
+    "variance": "Variance",
+    "vat": "VAT"
+  },
+  "sponsors": {
+    "title": "Sponsors",
+    "sponsorList": "Sponsor list",
+    "level": "Level",
+    "agreementAmount": "Agreement amount",
+    "status": "Status",
+    "deliverables": "Deliverables",
+    "contacted": "Contacted",
+    "agreed": "Agreed",
+    "signed": "Signed",
+    "delivered": "Delivered",
+    "invoiced": "Invoiced"
+  },
+  "reports": {
+    "title": "Reports",
+    "sponsorReport": "Sponsor report",
+    "annualReport": "Annual report",
+    "accountingReport": "Accounting report",
+    "generate": "Generate report",
+    "preview": "Preview",
+    "sendEmail": "Send by email"
+  },
+  "settings": {
+    "title": "Settings",
+    "festival": "Festival",
+    "users": "Users",
+    "ticketCategories": "Ticket categories",
+    "budgetPosts": "Budget posts",
+    "vatRates": "VAT rates",
+    "integrations": "Integrations"
+  }
+}
