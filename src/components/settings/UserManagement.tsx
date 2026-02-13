@@ -86,7 +86,7 @@ export default function UserManagement() {
         <h3 className="text-lg font-semibold">{t('settings.inviteUser')}</h3>
         <form onSubmit={handleInvite} className="mt-4 flex flex-wrap items-end gap-3">
           <div className="min-w-[200px] flex-1">
-            <label className="block text-sm font-medium text-slate-300">
+            <label className="block text-sm font-medium text-text-body">
               {t('auth.email')}
             </label>
             <input
@@ -95,17 +95,17 @@ export default function UserManagement() {
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
               placeholder="bruker@epost.no"
-              className="mt-1 block w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white placeholder-slate-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="mt-1 block w-full rounded-lg border border-border bg-surface px-3 py-2 text-text-body placeholder-text-muted focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-300">
+            <label className="block text-sm font-medium text-text-body">
               {t('settings.role')}
             </label>
             <select
               value={inviteRole}
               onChange={(e) => setInviteRole(e.target.value as UserRole)}
-              className="mt-1 block rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+              className="mt-1 block rounded-lg border border-border bg-surface px-3 py-2 text-text-body focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             >
               {ROLES.map((r) => (
                 <option key={r.value} value={r.value}>
@@ -138,23 +138,23 @@ export default function UserManagement() {
         <div className="mt-4 overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-700 text-slate-400">
+              <tr className="border-b border-border text-text-muted">
                 <th className="pb-3 pr-4 font-medium">{t('settings.userName')}</th>
                 <th className="pb-3 pr-4 font-medium">{t('auth.email')}</th>
                 <th className="pb-3 pr-4 font-medium">{t('settings.role')}</th>
                 <th className="pb-3 font-medium">{t('settings.actions')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-border-light">
               {users.map((user) => (
                 <tr key={user.id}>
-                  <td className="py-3 pr-4 text-white">
+                  <td className="py-3 pr-4 text-text-heading">
                     {user.full_name || '—'}
                   </td>
-                  <td className="py-3 pr-4 text-slate-300">{user.email}</td>
+                  <td className="py-3 pr-4 text-text-body">{user.email}</td>
                   <td className="py-3 pr-4">
                     {user.id === profile?.id ? (
-                      <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
+                      <span className="inline-flex items-center gap-1 rounded-full bg-primary-light px-2.5 py-0.5 text-xs font-medium text-primary">
                         <Shield size={12} />
                         {t(ROLES.find((r) => r.value === user.role)?.labelKey ?? '')}
                       </span>
@@ -164,7 +164,7 @@ export default function UserManagement() {
                         onChange={(e) =>
                           handleRoleChange(user.id, e.target.value as UserRole)
                         }
-                        className="rounded border border-slate-700 bg-slate-800 px-2 py-1 text-xs text-white"
+                        className="rounded border border-border bg-surface px-2 py-1 text-xs text-text-body"
                       >
                         {ROLES.map((r) => (
                           <option key={r.value} value={r.value}>
@@ -178,7 +178,7 @@ export default function UserManagement() {
                     {user.id !== profile?.id && (
                       <button
                         onClick={() => handleToggleActive(user)}
-                        className="flex items-center gap-1 rounded px-2 py-1 text-xs text-slate-400 hover:bg-slate-800 hover:text-danger"
+                        className="flex items-center gap-1 rounded px-2 py-1 text-xs text-text-muted hover:bg-surface-hover hover:text-danger"
                         title={t('settings.deactivate')}
                       >
                         <ShieldOff size={14} />
@@ -190,7 +190,7 @@ export default function UserManagement() {
               ))}
               {users.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-6 text-center text-slate-500">
+                  <td colSpan={4} className="py-6 text-center text-text-muted">
                     {t('settings.noUsers')}
                   </td>
                 </tr>

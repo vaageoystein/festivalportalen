@@ -35,7 +35,7 @@ export default function SettingsPage() {
       <h1 className="text-2xl font-bold">{t('settings.title')}</h1>
 
       {/* Tabs */}
-      <div className="mt-6 flex flex-wrap gap-1 border-b border-slate-800">
+      <div className="mt-6 flex flex-wrap gap-1 border-b border-border">
         {tabs.map(({ id, icon: Icon, labelKey }) => {
           if (id === 'users' && !isAdmin) return null
           return (
@@ -45,7 +45,7 @@ export default function SettingsPage() {
               className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
                 activeTab === id
                   ? 'border-primary text-primary'
-                  : 'border-transparent text-slate-400 hover:text-white'
+                  : 'border-transparent text-text-muted hover:text-text-body'
               }`}
             >
               <Icon size={16} />
@@ -60,16 +60,16 @@ export default function SettingsPage() {
         {activeTab === 'festival' && <FestivalSettings />}
         {activeTab === 'users' && isAdmin && <UserManagement />}
         {activeTab === 'ticket-categories' && (
-          <p className="text-slate-500">{t('settings.comingSoon')}</p>
+          <p className="text-text-muted">{t('settings.comingSoon')}</p>
         )}
         {activeTab === 'budget' && (
-          <p className="text-slate-500">{t('settings.comingSoon')}</p>
+          <p className="text-text-muted">{t('settings.comingSoon')}</p>
         )}
         {activeTab === 'vat' && (
-          <p className="text-slate-500">{t('settings.comingSoon')}</p>
+          <p className="text-text-muted">{t('settings.comingSoon')}</p>
         )}
         {activeTab === 'integrations' && (
-          <p className="text-slate-500">{t('settings.comingSoon')}</p>
+          <p className="text-text-muted">{t('settings.comingSoon')}</p>
         )}
       </div>
     </div>

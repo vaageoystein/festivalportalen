@@ -1,14 +1,47 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
-  --color-success: #22c55e;
-  --color-warning: #eab308;
-  --color-danger: #ef4444;
+  /* Brand colors */
+  --color-primary: var(--festival-primary, #6366F1);
+  --color-primary-dark: var(--festival-primary-dark, #4F46E5);
+  --color-primary-light: #EEF2FF;
+  --color-secondary: var(--festival-secondary, #F59E0B);
+  --color-secondary-light: #FFFBEB;
+
+  /* Semantic */
+  --color-success: #22C55E;
+  --color-success-light: #F0FDF4;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FFFBEB;
+  --color-danger: #EF4444;
+  --color-danger-light: #FEF2F2;
+
+  /* Surfaces */
+  --color-bg: #FAFAF9;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F5F5F4;
+
+  /* Text */
+  --color-text-heading: #1C1917;
+  --color-text-body: #44403C;
+  --color-text-muted: #A8A29E;
+
+  /* Borders */
+  --color-border: #E7E5E4;
+  --color-border-light: #F5F5F4;
+
+  /* Font families */
+  --font-heading: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 body {
-  @apply bg-slate-950 text-slate-100 antialiased;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-bg text-text-body antialiased;
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-text-heading);
 }

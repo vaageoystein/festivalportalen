@@ -27,7 +27,7 @@ import {
 } from '@/lib/sales-utils'
 import { exportSalesCsv } from '@/lib/export-csv'
 
-const COLORS = ['#3b82f6', '#22c55e', '#eab308', '#ef4444', '#a855f7', '#ec4899', '#06b6d4', '#f97316']
+const COLORS = ['#6366F1', '#22C55E', '#F59E0B', '#EF4444', '#A855F7', '#EC4899', '#06B6D4', '#F97316']
 
 function StatCard({ label, value, sub, icon: Icon }: {
   label: string
@@ -36,13 +36,13 @@ function StatCard({ label, value, sub, icon: Icon }: {
   icon: React.ElementType
 }) {
   return (
-    <div className="rounded-xl bg-slate-900 p-5">
-      <div className="flex items-center gap-3 text-slate-400">
+    <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+      <div className="flex items-center gap-3 text-text-muted">
         <Icon size={18} />
         <span className="text-sm font-medium">{label}</span>
       </div>
-      <p className="mt-2 text-2xl font-bold text-white">{value}</p>
-      {sub && <p className="mt-1 text-sm text-slate-500">{sub}</p>}
+      <p className="mt-2 text-2xl font-bold text-text-heading">{value}</p>
+      {sub && <p className="mt-1 text-sm text-text-muted">{sub}</p>}
     </div>
   )
 }
@@ -77,7 +77,7 @@ export default function SalesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-700 border-t-blue-500" />
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-border border-t-primary" />
       </div>
     )
   }
@@ -90,7 +90,7 @@ export default function SalesPage() {
         <div className="flex gap-2">
           <button
             onClick={() => exportSalesCsv(tickets, `billettsalg-${new Date().toISOString().slice(0, 10)}.csv`)}
-            className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-300 hover:border-slate-600"
+            className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-body hover:bg-surface-hover"
           >
             <Download size={16} />
             {t('sales.exportTickets')}
@@ -98,7 +98,7 @@ export default function SalesPage() {
           {fnb.length > 0 && (
             <button
               onClick={() => exportSalesCsv(fnb, `mat-drikke-${new Date().toISOString().slice(0, 10)}.csv`)}
-              className="flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-300 hover:border-slate-600"
+              className="flex items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text-body hover:bg-surface-hover"
             >
               <Download size={16} />
               {t('sales.exportFnb')}
@@ -140,27 +140,27 @@ export default function SalesPage() {
 
       {/* Sales over time */}
       {dailySales.length > 0 && (
-        <div className="rounded-xl bg-slate-900 p-5">
+        <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold">{t('sales.salesOverTime')}</h2>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={dailySales}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E7E5E4" />
               <XAxis
                 dataKey="date"
-                stroke="#64748b"
+                stroke="#A8A29E"
                 fontSize={12}
                 tickFormatter={(d: string) => d.slice(5)}
               />
-              <YAxis stroke="#64748b" fontSize={12} />
+              <YAxis stroke="#A8A29E" fontSize={12} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: 8 }}
-                labelStyle={{ color: '#94a3b8' }}
+                contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8 }}
+                labelStyle={{ color: '#44403C' }}
               />
               <Line
                 type="monotone"
                 dataKey="tickets"
                 name={t('sales.tickets')}
-                stroke="#3b82f6"
+                stroke="#6366F1"
                 strokeWidth={2}
                 dot={false}
               />
@@ -173,24 +173,24 @@ export default function SalesPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         {/* Per ticket type */}
         {byType.length > 0 && (
-          <div className="rounded-xl bg-slate-900 p-5">
+          <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
             <h2 className="mb-4 text-lg font-semibold">{t('sales.byTicketType')}</h2>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={byType} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-                <XAxis type="number" stroke="#64748b" fontSize={12} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E7E5E4" />
+                <XAxis type="number" stroke="#A8A29E" fontSize={12} />
                 <YAxis
                   type="category"
                   dataKey="type"
-                  stroke="#64748b"
+                  stroke="#A8A29E"
                   fontSize={12}
                   width={120}
-                  tick={{ fill: '#94a3b8' }}
+                  tick={{ fill: '#44403C' }}
                 />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: 8 }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8 }}
                 />
-                <Bar dataKey="tickets" name={t('sales.tickets')} fill="#3b82f6" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="tickets" name={t('sales.tickets')} fill="#6366F1" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -198,7 +198,7 @@ export default function SalesPage() {
 
         {/* Per channel */}
         {byChannel.length > 0 && (
-          <div className="rounded-xl bg-slate-900 p-5">
+          <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
             <h2 className="mb-4 text-lg font-semibold">{t('sales.byChannel')}</h2>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -218,7 +218,7 @@ export default function SalesPage() {
                   ))}
                 </Pie>
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: 8 }}
+                  contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8 }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -228,24 +228,24 @@ export default function SalesPage() {
 
       {/* F&B section */}
       {fnbByType.length > 0 && (
-        <div className="rounded-xl bg-slate-900 p-5">
+        <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold">{t('sales.fnb')}</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={fnbByType} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
-              <XAxis type="number" stroke="#64748b" fontSize={12} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E7E5E4" />
+              <XAxis type="number" stroke="#A8A29E" fontSize={12} />
               <YAxis
                 type="category"
                 dataKey="type"
-                stroke="#64748b"
+                stroke="#A8A29E"
                 fontSize={12}
                 width={150}
-                tick={{ fill: '#94a3b8' }}
+                tick={{ fill: '#44403C' }}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: '#1e293b', border: 'none', borderRadius: 8 }}
+                contentStyle={{ backgroundColor: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8 }}
               />
-              <Bar dataKey="revenue" name={t('sales.revenue')} fill="#22c55e" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="revenue" name={t('sales.revenue')} fill="#22C55E" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -253,10 +253,10 @@ export default function SalesPage() {
 
       {/* Empty state */}
       {sales.length === 0 && (
-        <div className="rounded-xl bg-slate-900 p-12 text-center">
-          <Ticket size={48} className="mx-auto text-slate-600" />
-          <p className="mt-4 text-lg font-medium text-slate-400">{t('sales.noData')}</p>
-          <p className="mt-1 text-sm text-slate-500">{t('sales.noDataHint')}</p>
+        <div className="rounded-xl border border-border bg-surface p-12 text-center shadow-sm">
+          <Ticket size={48} className="mx-auto text-primary" />
+          <p className="mt-4 text-lg font-medium text-text-body">{t('sales.noData')}</p>
+          <p className="mt-1 text-sm text-text-muted">{t('sales.noDataHint')}</p>
         </div>
       )}
     </div>

@@ -43,12 +43,12 @@ export default function AppLayout() {
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-slate-900 transition-transform lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-30 flex w-64 flex-col border-r border-border bg-white transition-transform lg:static lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-16 items-center gap-2 border-b border-slate-800 px-6">
-          <span className="text-lg font-bold text-white">
+        <div className="flex h-16 items-center gap-2 border-b border-border px-6">
+          <span className="text-lg font-bold text-text-heading">
             {t('app.name')}
           </span>
         </div>
@@ -62,8 +62,8 @@ export default function AppLayout() {
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+                    ? 'bg-primary-light text-primary'
+                    : 'text-text-muted hover:bg-surface-hover hover:text-text-body'
                 }`
               }
             >
@@ -73,10 +73,10 @@ export default function AppLayout() {
           ))}
         </nav>
 
-        <div className="border-t border-slate-800 p-3">
+        <div className="border-t border-border p-3">
           <button
             onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-400 transition-colors hover:bg-slate-800 hover:text-white"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-hover hover:text-text-body"
           >
             <LogOut size={20} />
             {t('auth.logout')}
@@ -87,20 +87,20 @@ export default function AppLayout() {
       {/* Main content */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar (mobile) */}
-        <header className="flex h-16 items-center gap-4 border-b border-slate-800 bg-slate-900 px-4 lg:hidden">
+        <header className="flex h-16 items-center gap-4 border-b border-border bg-white px-4 lg:hidden">
           <button
             onClick={() => setSidebarOpen(true)}
-            className="text-slate-400 hover:text-white"
+            className="text-text-muted hover:text-text-body"
           >
             {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <span className="text-lg font-bold text-white">
+          <span className="text-lg font-bold text-text-heading">
             {t('app.name')}
           </span>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto bg-bg p-6">
           <Outlet />
         </main>
       </div>
